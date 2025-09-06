@@ -1,0 +1,135 @@
+﻿using System;
+using System.Collections.Generic;
+using PerpusApp.Controllers;
+using PerpusApp.Models;
+
+namespace PerpusApp.Views
+{
+    // View untuk menampilkan output ke konsol
+    public class ConsoleView
+    {
+        private readonly PerpustakaanController controller;
+
+        public ConsoleView(PerpustakaanController controller)
+        {
+            this.controller = controller;
+        }
+
+        public void TampilkanMenuUtama()
+        {
+            Console.WriteLine("=== SELAMAT DATANG DI APLIKASI PERPUSTAKAAN ===");
+            
+            while (true)
+            {
+                Console.WriteLine("\nMenu:");
+                Console.WriteLine("1. Tampilkan semua buku");
+                Console.WriteLine("2. Cari buku");
+                Console.WriteLine("3. Tambah buku");
+                Console.WriteLine("4. Pinjam buku");
+                Console.WriteLine("5. Kembalikan buku");
+                Console.WriteLine("6. Keluar");
+                Console.Write("Pilih menu (1-6): ");
+
+                var pilihan = Console.ReadLine();
+
+                switch (pilihan)
+                {
+                    case "1":
+                        TampilkanSemuaBuku();
+                        break;
+                    case "2":
+                        CariMenuBuku();
+                        break;
+                    case "3":
+                        TambahMenuBuku();
+                        break;
+                    case "4":
+                        PinjamMenuBuku();
+                        break;
+                    case "5":
+                        KembalikanMenuBuku();
+                        break;
+                    case "6":
+                        Console.WriteLine("Terima kasih telah menggunakan aplikasi perpustakaan!");
+                        return;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid!");
+                        break;
+                }
+            }
+        }
+
+        public void TampilkanSemuaBuku()
+        {
+            Console.WriteLine("\n=== DAFTAR BUKU ===");
+            var daftarBuku = controller.GetSemuaBuku();
+            if (daftarBuku.Count == 0)
+            {
+                Console.WriteLine("Tidak ada buku dalam perpustakaan.");
+                return;
+            }
+
+            foreach (var buku in daftarBuku)
+            {
+                Console.WriteLine(buku);
+            }
+        }
+
+        private void CariMenuBuku()
+        {
+            Console.Write("Masukkan kata kunci: ");
+            var kata = Console.ReadLine();
+            if (string.IsNullOrEmpty(kata)) return;
+
+            Console.WriteLine($"\n=== HASIL PENCARIAN: '{kata}' ===");
+            var hasil = controller.CariBuku(kata);
+
+            if (hasil.Count == 0)
+            {
+                Console.WriteLine("Tidak ada buku yang ditemukan.");
+                return;
+            }
+
+            foreach (var buku in hasil)
+            {
+                Console.WriteLine(buku);
+            }
+        }
+
+        private void TambahMenuBuku()
+        {
+            Console.Write("Judul buku: ");
+            var judul = Console.ReadLine();
+            Console.Write("Pengarang: ");
+            var pengarang = Console.ReadLine();
+            Console.Write("Kategori: ");
+            var kategori = Console.ReadLine();
+            
+            if (!string.IsNullOrEmpty(judul) && !string.IsNullOrEmpty(pengarang))
+            {
+                string result = controller.TambahBuku(judul, pengarang, kategori ?? "Umum");
+                Console.WriteLine(result);
+            }
+        }
+
+        private void PinjamMenuBuku()
+        {
+            Console.Write("Masukkan ID buku yang ingin dipinjam: ");
+            if (int.TryParse(Console.ReadLine(), out int idPinjam))
+            {
+                string result = controller.PinjamBuku(idPinjam);
+                Console.WriteLine(result);
+            }
+        }
+
+        private void KembalikanMenuBuku()
+        {
+            Console.Write("Masukkan ID buku yang dikembalikan: ");
+            if (int.TryParse(Console.ReadLine(), out int idKembali))
+            {
+                string result = controller.KembalikanBuku(idKembali);
+                Console.WriteLine(result);
+            }
+        }
+    }
+}

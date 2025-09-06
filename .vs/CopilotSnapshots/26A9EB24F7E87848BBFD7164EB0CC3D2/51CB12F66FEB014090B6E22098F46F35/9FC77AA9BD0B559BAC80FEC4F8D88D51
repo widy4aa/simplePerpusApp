@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using PerpusApp.Models;
+
+namespace PerpusApp.Controllers
+{
+    // Controller untuk mengelola perpustakaan
+    public class PerpustakaanController
+    {
+        private List<Buku> daftarBuku;
+        private int nextId;
+
+        public PerpustakaanController()
+        {
+            daftarBuku = new List<Buku>();
+            nextId = 1;
+            
+            // Tambah beberapa buku contoh
+            TambahBuku("Laskar Pelangi", "Andrea Hirata", "Novel");
+            TambahBuku("Bumi Manusia", "Pramoedya Ananta Toer", "Novel");
+            TambahBuku("Algoritma dan Pemrograman", "Rinaldi Munir", "Komputer");
+        }
+
+        public List<Buku> GetSemuaBuku()
+        {
+            return daftarBuku;
+        }
+
+        public List<Buku> CariBuku(string kata)
+        {
+            return daftarBuku.Where(b => 
+                b.Judul.Contains(kata, StringComparison.OrdinalIgnoreCase) ||
+                b.Pengarang.Contains(kata, StringComparison.OrdinalIgnoreCase) ||
+                b.Kategori.Contains(kata, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        public string TambahBuku(string judul, string pengarang, string kategori)
+        {
+            var buku = new Buku(nextId++, judul, pengarang, kategori);
+            daftarBuku.Add(buku);
+            return $"Buku '{judul}' berhasil ditambahkan!";
+        }
+
+        public string PinjamBuku(int id)
+        {
+            var buku = daftarBuku.FirstOrDefault(b => b.Id == id);
+            if (buku == null)
+            {
+                return "Buku tidak ditemukan!";
+            }
+
+            if (!buku.Tersedia)
+            {
+                return "Buku sedang dipinjam!";
+            }
+
+            buku.Tersedia = false;
+            return $"Buku '{buku.Judul}' berhasil dipinjam!";
+        }
+
+        public string KembalikanBuku(int id)
+        {
+            var buku = daftarBuku.FirstOrDefault(b => b.Id == id);
+            if (buku == null)
+            {
+                return "Buku tidak ditemukan!";
+            }
+
+            if (buku.Tersedia)
+            {
+                return "Buku sudah tersedia di perpustakaan!";
+            }
+
+            buku.Tersedia = true;
+            return $"Buku '{buku.Judul}' berhasil dikembalikan!";
+        }
+    }
+}

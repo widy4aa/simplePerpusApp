@@ -1,0 +1,378 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Npgsql;
+using PerpusApp.Models;
+
+namespace PerpusApp.Data
+{
+    public class DatabaseService
+    {
+        private readonly DatabaseConnectionSingleton _connectionSingleton;
+
+        public DatabaseService(string connectionString)
+        {
+            // Menggunakan Singleton Pattern untuk koneksi database
+            _connectionSingleton = DatabaseConnectionSingleton.GetInstance(connectionString);
+        }
+
+        public async Task<bool> TestConnectionAsync()
+        {
+            return await _connectionSingleton.TestConnectionAsync();
+        }
+
+        // Metode untuk Buku
+        public async Task<List<Buku>> GetSemuaBukuAsync()
+        {
+            var bukuList = new List<Buku>();
+
+            using (var connection = _connectionSingleton.CreateConnection())
+            {
+                await connection.OpenAsync();
+                
+                using (var cmd = new NpgsqlCommand("SELECT id_buku, judul, penulis, kategori, jumlah_stok FROM buku", connection))
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var buku = new Buku();
+                        buku.Id = reader.GetInt32(0);
+                        buku.Judul = reader.GetString(1);
+                        buku.Penulis = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
+                        buku.Kategori = reader.IsDBNull(3) ? string.Empty : reader.GetString(3);
+                        buku.JumlahStok = reader.GetInt32(4);
+                        bukuList.Add(buku);
+                    }
+                }
+            }
+
+            return bukuList;
+        }
+
+        public async Task<List<Buku>> CariBukuAsync(string kata)
+        {
+            var bukuList = new List<Buku>();
+
+            using (var connection = _connectionSingleton.CreateConnection())
+            {
+                await connection.OpenAsync();
+                
+                using (var cmd = new NpgsqlCommand(
+                    "SELECT id_buku, judul, penulis, kategori, jumlah_stok FROM buku " +
+                    "WHERE judul ILIKE @kata OR penulis ILIKE @kata OR kategori ILIKE @kata", connection))
+                {
+                    cmd.Parameters.AddWithValue("kata", $"%{kata}%");
+                    
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var buku = new Buku();
+                            buku.Id = reader.GetInt32(0);
+                            buku.Judul = reader.GetString(1);
+                            buku.Penulis = reader.IsDBNull(2) ? string.Empty : reader.GetString(2);
+                            buku.Kategori = reader.IsDBNull(3) ? string.Empty : reader.GetString(3);
+                            buku.JumlahStok = reader.GetInt32(4);
+                            bukuList.Add(buku);
+                        }
+                    }
+                }
+            }
+
+            return bukuList;
+        }
+
+        public async Task<bool> TambahBukuAsync(string judul, string penulis, string kategori, int jumlahStok = 1)
+        {
+            try
+            {
+                using (var connection = _connectionSingleton.CreateConnection())
+                {
+                    await connection.OpenAsync();
+                    
+                    using (var cmd = new NpgsqlCommand(
+                        "INSERT INTO buku (judul, penulis, kategori, jumlah_stok) VALUES (@judul, @penulis, @kategori, @jumlahStok)",
+                        connection))
+                    {
+                        cmd.Parameters.AddWithValue("judul", judul);
+                        cmd.Parameters.AddWithValue("penulis", string.IsNullOrEmpty(penulis) ? DBNull.Value : (object)penulis);
+                        cmd.Parameters.AddWithValue("kategori", string.IsNullOrEmpty(kategori) ? DBNull.Value : (object)kategori);
+                        cmd.Parameters.AddWithValue("jumlahStok", jumlahStok);
+                        
+                        await cmd.ExecuteNonQueryAsync();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateStokBukuAsync(int id, int jumlahStok)
+        {
+            try
+            {
+                using (var connection = _connectionSingleton.CreateConnection())
+                {
+                    await connection.OpenAsync();
+                    
+                    using (var cmd = new NpgsqlCommand(
+                        "UPDATE buku SET jumlah_stok = @jumlahStok WHERE id_buku = @id",
+                        connection))
+                    {
+                        cmd.Parameters.AddWithValue("id", id);
+                        cmd.Parameters.AddWithValue("jumlahStok", jumlahStok);
+                        
+                        int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // Metode untuk Peminjaman
+        public async Task<bool> PinjamBukuAsync(int idBuku, int idPengguna, int idStaff)
+        {
+            try
+            {
+                using (var connection = _connectionSingleton.CreateConnection())
+                {
+                    await connection.OpenAsync();
+                    using (var transaction = await connection.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            // Cek stok buku
+                            int stokBuku = 0;
+                            using (var cmdCheck = new NpgsqlCommand(
+                                "SELECT jumlah_stok FROM buku WHERE id_buku = @idBuku", 
+                                connection, 
+                                transaction as NpgsqlTransaction))
+                            {
+                                cmdCheck.Parameters.AddWithValue("idBuku", idBuku);
+                                var result = await cmdCheck.ExecuteScalarAsync();
+                                if (result != null)
+                                {
+                                    stokBuku = Convert.ToInt32(result);
+                                }
+                            }
+
+                            if (stokBuku <= 0)
+                            {
+                                await transaction.RollbackAsync();
+                                return false;
+                            }
+
+                            // Kurangi stok buku
+                            using (var cmdUpdate = new NpgsqlCommand(
+                                "UPDATE buku SET jumlah_stok = jumlah_stok - 1 WHERE id_buku = @idBuku",
+                                connection,
+                                transaction as NpgsqlTransaction))
+                            {
+                                cmdUpdate.Parameters.AddWithValue("idBuku", idBuku);
+                                await cmdUpdate.ExecuteNonQueryAsync();
+                            }
+
+                            // Catat peminjaman
+                            using (var cmdInsert = new NpgsqlCommand(
+                                "INSERT INTO peminjaman (id_pengguna, id_buku, id_staff, tanggal_pinjam, status) " +
+                                "VALUES (@idPengguna, @idBuku, @idStaff, @tanggalPinjam, 'Dipinjam')",
+                                connection,
+                                transaction as NpgsqlTransaction))
+                            {
+                                cmdInsert.Parameters.AddWithValue("idPengguna", idPengguna);
+                                cmdInsert.Parameters.AddWithValue("idBuku", idBuku);
+                                cmdInsert.Parameters.AddWithValue("idStaff", idStaff);
+                                cmdInsert.Parameters.AddWithValue("tanggalPinjam", DateTime.Now.Date);
+                                
+                                await cmdInsert.ExecuteNonQueryAsync();
+                            }
+
+                            await transaction.CommitAsync();
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            await transaction.RollbackAsync();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> KembalikanBukuAsync(int idPeminjaman, int idBuku)
+        {
+            try
+            {
+                using (var connection = _connectionSingleton.CreateConnection())
+                {
+                    await connection.OpenAsync();
+                    using (var transaction = await connection.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            // Update status peminjaman
+                            using (var cmdUpdate = new NpgsqlCommand(
+                                "UPDATE peminjaman SET status = 'Dikembalikan', tanggal_kembali = @tanggalKembali " +
+                                "WHERE id_peminjaman = @idPeminjaman AND status = 'Dipinjam'",
+                                connection,
+                                transaction as NpgsqlTransaction))
+                            {
+                                cmdUpdate.Parameters.AddWithValue("idPeminjaman", idPeminjaman);
+                                cmdUpdate.Parameters.AddWithValue("tanggalKembali", DateTime.Now.Date);
+                                
+                                int rowsAffected = await cmdUpdate.ExecuteNonQueryAsync();
+                                if (rowsAffected == 0)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return false;
+                                }
+                            }
+
+                            // Tambah stok buku
+                            using (var cmdUpdate = new NpgsqlCommand(
+                                "UPDATE buku SET jumlah_stok = jumlah_stok + 1 WHERE id_buku = @idBuku",
+                                connection,
+                                transaction as NpgsqlTransaction))
+                            {
+                                cmdUpdate.Parameters.AddWithValue("idBuku", idBuku);
+                                await cmdUpdate.ExecuteNonQueryAsync();
+                            }
+
+                            await transaction.CommitAsync();
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            await transaction.RollbackAsync();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<Peminjaman>> GetPeminjamanAktifAsync()
+        {
+            var peminjamanList = new List<Peminjaman>();
+
+            using (var connection = _connectionSingleton.CreateConnection())
+            {
+                await connection.OpenAsync();
+                
+                using (var cmd = new NpgsqlCommand(
+                    "SELECT p.id_peminjaman, p.id_pengguna, p.id_buku, p.id_staff, p.tanggal_pinjam, p.status, " +
+                    "b.judul, pg.nama as nama_pengguna, s.nama as nama_staff " +
+                    "FROM peminjaman p " +
+                    "JOIN buku b ON p.id_buku = b.id_buku " +
+                    "JOIN pengguna pg ON p.id_pengguna = pg.id_pengguna " +
+                    "JOIN staff s ON p.id_staff = s.id_staff " +
+                    "WHERE p.status = 'Dipinjam'", connection))
+                {
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var bukuObj = new Buku();
+                            bukuObj.Judul = reader.GetString(6);
+                            
+                            var penggunaObj = new Pengguna();
+                            penggunaObj.Nama = reader.GetString(7);
+                            
+                            var staffObj = new Staff();
+                            staffObj.Nama = reader.GetString(8);
+                            
+                            var peminjaman = new Peminjaman
+                            {
+                                Id = reader.GetInt32(0),
+                                IdPengguna = reader.GetInt32(1),
+                                IdBuku = reader.GetInt32(2),
+                                IdStaff = reader.GetInt32(3),
+                                TanggalPinjam = reader.GetDateTime(4),
+                                Status = reader.GetString(5),
+                                Buku = bukuObj,
+                                Pengguna = penggunaObj,
+                                Staff = staffObj
+                            };
+                            
+                            peminjamanList.Add(peminjaman);
+                        }
+                    }
+                }
+            }
+
+            return peminjamanList;
+        }
+
+        // Metode untuk Pengguna
+        public async Task<List<Pengguna>> GetSemuaPenggunaAsync()
+        {
+            var penggunaList = new List<Pengguna>();
+
+            using (var connection = _connectionSingleton.CreateConnection())
+            {
+                await connection.OpenAsync();
+                
+                using (var cmd = new NpgsqlCommand("SELECT id_pengguna, nama, alamat, no_telepon FROM pengguna", connection))
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        penggunaList.Add(new Pengguna
+                        {
+                            Id = reader.GetInt32(0),
+                            Nama = reader.GetString(1),
+                            Alamat = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                            NoTelepon = reader.IsDBNull(3) ? string.Empty : reader.GetString(3)
+                        });
+                    }
+                }
+            }
+
+            return penggunaList;
+        }
+
+        // Metode untuk Staff
+        public async Task<List<Staff>> GetSemuaStaffAsync()
+        {
+            var staffList = new List<Staff>();
+
+            using (var connection = _connectionSingleton.CreateConnection())
+            {
+                await connection.OpenAsync();
+                
+                using (var cmd = new NpgsqlCommand("SELECT id_staff, nama, jabatan, no_telepon FROM staff", connection))
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        staffList.Add(new Staff
+                        {
+                            Id = reader.GetInt32(0),
+                            Nama = reader.GetString(1),
+                            Jabatan = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                            NoTelepon = reader.IsDBNull(3) ? string.Empty : reader.GetString(3)
+                        });
+                    }
+                }
+            }
+
+            return staffList;
+        }
+    }
+}

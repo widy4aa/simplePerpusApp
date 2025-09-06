@@ -1,0 +1,232 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\data\\databaseconnectionsingleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\data\\databaseconnectionsingleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\models\\peminjaman.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\models\\peminjaman.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\models\\laporanbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\models\\laporanbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\perpusapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\perpusapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\models\\buku.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\models\\buku.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\controllers\\perpustakaancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\controllers\\perpustakaancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\views\\consoleview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\views\\consoleview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\models\\pengguna.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\models\\pengguna.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\data\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\data\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|c:\\users\\widy4aa\\documents\\coding\\perpusapp\\perpusapp\\models\\perpustakaanitemfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49CCED8A-5949-41B6-A76C-F0CF08774049}|PerpusApp\\PerpusApp.csproj|solutionrelative:perpusapp\\models\\perpustakaanitemfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LaporanBuilder.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\LaporanBuilder.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Models\\LaporanBuilder.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\LaporanBuilder.cs",
+              "RelativeToolTip": "PerpusApp\\Models\\LaporanBuilder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAM8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:46:00.366Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "PerpustakaanItemFactory.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\PerpustakaanItemFactory.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Models\\PerpustakaanItemFactory.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\PerpustakaanItemFactory.cs",
+              "RelativeToolTip": "PerpusApp\\Models\\PerpustakaanItemFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:45:28.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DatabaseConnectionSingleton.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Data\\DatabaseConnectionSingleton.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Data\\DatabaseConnectionSingleton.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Data\\DatabaseConnectionSingleton.cs",
+              "RelativeToolTip": "PerpusApp\\Data\\DatabaseConnectionSingleton.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:45:05.491Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DatabaseService.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Data\\DatabaseService.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Data\\DatabaseService.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Data\\DatabaseService.cs",
+              "RelativeToolTip": "PerpusApp\\Data\\DatabaseService.cs",
+              "ViewState": "AgIAAHYBAAAAAAAAAABRwHkBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:27:39.801Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Peminjaman.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Peminjaman.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Models\\Peminjaman.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Peminjaman.cs",
+              "RelativeToolTip": "PerpusApp\\Models\\Peminjaman.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:26:43.437Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Staff.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Models\\Staff.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Staff.cs",
+              "RelativeToolTip": "PerpusApp\\Models\\Staff.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:26:35.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Pengguna.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Pengguna.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Models\\Pengguna.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Pengguna.cs",
+              "RelativeToolTip": "PerpusApp\\Models\\Pengguna.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:26:30.066Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ConsoleView.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Views\\ConsoleView.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Views\\ConsoleView.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Views\\ConsoleView.cs",
+              "RelativeToolTip": "PerpusApp\\Views\\ConsoleView.cs",
+              "ViewState": "AgIAAPMBAAAAAAAAAEBVwPcBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:22:17.613Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PerpustakaanController.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Controllers\\PerpustakaanController.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Controllers\\PerpustakaanController.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Controllers\\PerpustakaanController.cs",
+              "RelativeToolTip": "PerpusApp\\Controllers\\PerpustakaanController.cs",
+              "ViewState": "AgIAAJMAAAAAAAAAAEBVwJcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:22:02Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Buku.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Buku.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Models\\Buku.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Models\\Buku.cs",
+              "RelativeToolTip": "PerpusApp\\Models\\Buku.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAABBwCAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T20:21:49.698Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PerpusApp",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\PerpusApp.csproj",
+              "RelativeDocumentMoniker": "PerpusApp\\PerpusApp.csproj",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\PerpusApp.csproj",
+              "RelativeToolTip": "PerpusApp\\PerpusApp.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-06T20:11:05.95Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Program.cs",
+              "RelativeDocumentMoniker": "PerpusApp\\Program.cs",
+              "ToolTip": "C:\\Users\\widy4aa\\Documents\\Coding\\PerpusApp\\PerpusApp\\Program.cs",
+              "RelativeToolTip": "PerpusApp\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T19:51:54.556Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

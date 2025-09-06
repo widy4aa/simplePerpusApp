@@ -1,0 +1,28 @@
+﻿using System;
+
+namespace PerpusApp.Models
+{
+    // Class untuk merepresentasikan Buku
+    public class Buku
+    {
+        public int Id { get; set; }
+        public string Judul { get; set; }   
+        public string Pengarang { get; set; }
+        public string Kategori { get; set; }
+        public bool Tersedia { get; set; }
+
+        public Buku(int id, string judul, string pengarang, string kategori)
+        {
+            Id = id;
+            Judul = judul;
+            Pengarang = pengarang;
+            Kategori = kategori;
+            Tersedia = true;
+        }
+
+        public override string ToString()
+        {
+            return $"[{Id}] {Judul} - {Pengarang} ({Kategori}) - {(Tersedia ? "Tersedia" : "Dipinjam")}";
+        }
+    }
+}

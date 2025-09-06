@@ -1,0 +1,277 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using PerpusApp.Controllers;
+using PerpusApp.Models;
+
+namespace PerpusApp.Views
+{
+    // View untuk menampilkan output ke konsol
+    public class ConsoleView
+    {
+        private readonly PerpustakaanController controller;
+
+        public ConsoleView(PerpustakaanController controller)
+        {
+            this.controller = controller;
+        }
+
+        public async Task TampilkanMenuUtama()
+        {
+            Console.WriteLine("=== SELAMAT DATANG DI APLIKASI PERPUSTAKAAN ===");
+            
+            // Tampilkan informasi koneksi database
+            Console.WriteLine("Menghubungkan ke database...");
+            bool terhubung = await controller.TestKoneksiDatabase();
+            if (terhubung)
+            {
+                Console.WriteLine("Berhasil terhubung ke database!");
+                Console.WriteLine("Connection string: postgresql://postgres:OFpjBpURdQKFJpiYsLDzGqBMtSQQmCvy@interchange.proxy.rlwy.net:13569/railway");
+            }
+            else
+            {
+                Console.WriteLine("Gagal terhubung ke database! Aplikasi akan tetap berjalan dengan fitur terbatas.");
+            }
+            
+            while (true)
+            {
+                Console.WriteLine("\nMenu:");
+                Console.WriteLine("1. Tampilkan semua buku");
+                Console.WriteLine("2. Cari buku");
+                Console.WriteLine("3. Tambah buku");
+                Console.WriteLine("4. Pinjam buku");
+                Console.WriteLine("5. Kembalikan buku");
+                Console.WriteLine("6. Lihat peminjaman aktif");
+                Console.WriteLine("7. Lihat daftar pengguna");
+                Console.WriteLine("8. Lihat daftar staff");
+                Console.WriteLine("9. Keluar");
+                Console.Write("Pilih menu (1-9): ");
+
+                var pilihan = Console.ReadLine();
+
+                switch (pilihan)
+                {
+                    case "1":
+                        await TampilkanSemuaBuku();
+                        break;
+                    case "2":
+                        await CariMenuBuku();
+                        break;
+                    case "3":
+                        await TambahMenuBuku();
+                        break;
+                    case "4":
+                        await PinjamMenuBuku();
+                        break;
+                    case "5":
+                        await KembalikanMenuBuku();
+                        break;
+                    case "6":
+                        await TampilkanPeminjamanAktif();
+                        break;
+                    case "7":
+                        await TampilkanDaftarPengguna();
+                        break;
+                    case "8":
+                        await TampilkanDaftarStaff();
+                        break;
+                    case "9":
+                        Console.WriteLine("Terima kasih telah menggunakan aplikasi perpustakaan!");
+                        return;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid!");
+                        break;
+                }
+            }
+        }
+
+        public async Task TampilkanSemuaBuku()
+        {
+            Console.WriteLine("\n=== DAFTAR BUKU ===");
+            var daftarBuku = await controller.GetSemuaBuku();
+            if (daftarBuku.Count == 0)
+            {
+                Console.WriteLine("Tidak ada buku dalam perpustakaan.");
+                return;
+            }
+
+            foreach (var buku in daftarBuku)
+            {
+                Console.WriteLine(buku);
+            }
+        }
+
+        private async Task CariMenuBuku()
+        {
+            Console.Write("Masukkan kata kunci: ");
+            var kata = Console.ReadLine();
+            if (string.IsNullOrEmpty(kata)) return;
+
+            Console.WriteLine($"\n=== HASIL PENCARIAN: '{kata}' ===");
+            var hasil = await controller.CariBuku(kata);
+
+            if (hasil.Count == 0)
+            {
+                Console.WriteLine("Tidak ada buku yang ditemukan.");
+                return;
+            }
+
+            foreach (var buku in hasil)
+            {
+                Console.WriteLine(buku);
+            }
+        }
+
+        private async Task TambahMenuBuku()
+        {
+            Console.Write("Judul buku: ");
+            var judul = Console.ReadLine();
+            Console.Write("Penulis: ");
+            var penulis = Console.ReadLine();
+            Console.Write("Kategori: ");
+            var kategori = Console.ReadLine();
+            Console.Write("Jumlah stok: ");
+            
+            int jumlahStok = 1;
+            if (!int.TryParse(Console.ReadLine(), out jumlahStok) || jumlahStok < 1)
+            {
+                jumlahStok = 1;
+                Console.WriteLine("Jumlah stok tidak valid, menggunakan nilai default (1).");
+            }
+            
+            if (!string.IsNullOrEmpty(judul) && !string.IsNullOrEmpty(penulis))
+            {
+                string result = await controller.TambahBuku(judul, penulis, kategori ?? "Umum", jumlahStok);
+                Console.WriteLine(result);
+            }
+        }
+
+        private async Task PinjamMenuBuku()
+        {
+            // Tampilkan buku yang tersedia
+            Console.WriteLine("\n=== BUKU YANG TERSEDIA ===");
+            var daftarBuku = await controller.GetSemuaBuku();
+            var bukuTersedia = daftarBuku.Where(b => b.JumlahStok > 0).ToList();
+            
+            if (bukuTersedia.Count == 0)
+            {
+                Console.WriteLine("Tidak ada buku yang tersedia untuk dipinjam.");
+                return;
+            }
+
+            foreach (var buku in bukuTersedia)
+            {
+                Console.WriteLine(buku);
+            }
+
+            Console.Write("\nMasukkan ID buku yang ingin dipinjam: ");
+            if (int.TryParse(Console.ReadLine(), out int idPinjam))
+            {
+                string result = await controller.PinjamBuku(idPinjam);
+                Console.WriteLine(result);
+            }
+        }
+
+        private async Task KembalikanMenuBuku()
+        {
+            // Tampilkan peminjaman aktif
+            Console.WriteLine("\n=== PEMINJAMAN AKTIF ===");
+            var peminjamanList = await controller.GetDaftarPeminjamanAktif();
+            
+            if (peminjamanList.Count == 0)
+            {
+                Console.WriteLine("Tidak ada peminjaman aktif saat ini.");
+                return;
+            }
+
+            foreach (var peminjaman in peminjamanList)
+            {
+                Console.WriteLine($"[{peminjaman.Id}] Buku: {peminjaman.Buku.Judul} - Peminjam: {peminjaman.Pengguna.Nama}");
+            }
+
+            Console.Write("\nMasukkan ID peminjaman yang ingin dikembalikan: ");
+            if (int.TryParse(Console.ReadLine(), out int idPeminjaman))
+            {
+                var peminjaman = peminjamanList.FirstOrDefault(p => p.Id == idPeminjaman);
+                if (peminjaman != null)
+                {
+                    string result = await controller.KembalikanBuku(idPeminjaman, peminjaman.IdBuku);
+                    Console.WriteLine(result);
+                }
+                else
+                {
+                    Console.WriteLine("ID peminjaman tidak valid.");
+                }
+            }
+        }
+
+        private async Task TampilkanPeminjamanAktif()
+        {
+            Console.WriteLine("\n=== DAFTAR PEMINJAMAN AKTIF ===");
+            var peminjamanList = await controller.GetDaftarPeminjamanAktif();
+            
+            if (peminjamanList.Count == 0)
+            {
+                Console.WriteLine("Tidak ada peminjaman aktif saat ini.");
+                return;
+            }
+
+            foreach (var peminjaman in peminjamanList)
+            {
+                Console.WriteLine($"[{peminjaman.Id}] Buku: {peminjaman.Buku.Judul} - Peminjam: {peminjaman.Pengguna.Nama} - Petugas: {peminjaman.Staff.Nama} - Tanggal: {peminjaman.TanggalPinjam:dd/MM/yyyy}");
+            }
+        }
+
+        private async Task TampilkanDaftarPengguna()
+        {
+            Console.WriteLine("\n=== DAFTAR PENGGUNA ===");
+            var penggunaList = await controller.GetDaftarPengguna();
+            
+            if (penggunaList.Count == 0)
+            {
+                Console.WriteLine("Tidak ada pengguna terdaftar.");
+                return;
+            }
+
+            foreach (var pengguna in penggunaList)
+            {
+                Console.WriteLine($"[{pengguna.Id}] {pengguna.Nama} - {pengguna.Alamat} - {pengguna.NoTelepon}");
+            }
+        }
+
+        private async Task TampilkanDaftarStaff()
+        {
+            Console.WriteLine("\n=== DAFTAR STAFF ===");
+            var staffList = await controller.GetDaftarStaff();
+            
+            if (staffList.Count == 0)
+            {
+                Console.WriteLine("Tidak ada staff terdaftar.");
+                return;
+            }
+
+            foreach (var staff in staffList)
+            {
+                Console.WriteLine($"[{staff.Id}] {staff.Nama} - {staff.Jabatan} - {staff.NoTelepon}");
+            }
+            
+            // Pilih staff default
+            Console.Write("\nMasukkan ID staff untuk digunakan sebagai petugas (kosongkan untuk tetap menggunakan default): ");
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int staffId))
+            {
+                var staff = staffList.FirstOrDefault(s => s.Id == staffId);
+                if (staff != null)
+                {
+                    controller.SetDefaultIds(staffId, 1); // Tetap gunakan pengguna default 1
+                    Console.WriteLine($"Staff default berhasil diubah ke: {staff.Nama}");
+                }
+                else
+                {
+                    Console.WriteLine("ID staff tidak valid.");
+                }
+            }
+        }
+    }
+}

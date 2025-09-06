@@ -1,0 +1,184 @@
+using System;
+
+namespace PerpusApp.Models
+{
+    /// <summary>
+    /// Abstract Product: Semua jenis item perpustakaan harus mengimplementasikan interface ini
+    /// </summary>
+    public interface IPerpustakaanItem
+    {
+        int Id { get; }
+        string GetDisplayInfo();
+        bool IsAvailable();
+    }
+    
+    /// <summary>
+    /// Concrete Product: Buku sebagai implementasi dari IPerpustakaanItem
+    /// </summary>
+    public class BukuItem : IPerpustakaanItem
+    {
+        private readonly Buku _buku;
+        
+        public BukuItem(Buku buku)
+        {
+            _buku = buku;
+        }
+        
+        public int Id => _buku.Id;
+        
+        public string GetDisplayInfo()
+        {
+            return $"Buku: {_buku.Judul} oleh {_buku.Penulis} ({_buku.Kategori})";
+        }
+        
+        public bool IsAvailable()
+        {
+            return _buku.JumlahStok > 0;
+        }
+    }
+    
+    /// <summary>
+    /// Concrete Product: Majalah sebagai implementasi dari IPerpustakaanItem
+    /// </summary>
+    public class MajalahItem : IPerpustakaanItem
+    {
+        public int Id { get; private set; }
+        public string Judul { get; private set; }
+        public string Edisi { get; private set; }
+        public int Stok { get; private set; }
+        
+        public MajalahItem(int id, string judul, string edisi, int stok)
+        {
+            Id = id;
+            Judul = judul;
+            Edisi = edisi;
+            Stok = stok;
+        }
+        
+        public string GetDisplayInfo()
+        {
+            return $"Majalah: {Judul} Edisi {Edisi}";
+        }
+        
+        public bool IsAvailable()
+        {
+            return Stok > 0;
+        }
+    }
+    
+    /// <summary>
+    /// Concrete Product: Media Digital sebagai implementasi dari IPerpustakaanItem
+    /// </summary>
+    public class MediaDigitalItem : IPerpustakaanItem
+    {
+        public int Id { get; private set; }
+        public string Judul { get; private set; }
+        public string Format { get; private set; }
+        public bool Tersedia { get; private set; }
+        
+        public MediaDigitalItem(int id, string judul, string format, bool tersedia)
+        {
+            Id = id;
+            Judul = judul;
+            Format = format;
+            Tersedia = tersedia;
+        }
+        
+        public string GetDisplayInfo()
+        {
+            return $"Media Digital: {Judul} ({Format})";
+        }
+        
+        public bool IsAvailable()
+        {
+            return Tersedia;
+        }
+    }
+    
+    /// <summary>
+    /// Factory Method Pattern: Definisi interface untuk membuat objek item perpustakaan,
+    /// namun membiarkan subclass memutuskan class mana yang akan diinstansiasi.
+    /// Pattern ini memungkinkan pembuatan objek yang berbeda tanpa menentukan class spesifik.
+    /// </summary>
+    public abstract class PerpustakaanItemFactory
+    {
+        // Factory Method
+        public abstract IPerpustakaanItem CreateItem();
+        
+        // Operasi umum yang bisa menggunakan factory method
+        public string GetItemInfo()
+        {
+            // Memanggil factory method untuk mendapatkan objek
+            IPerpustakaanItem item = CreateItem();
+            
+            // Menggunakan objek
+            return $"Item {item.Id}: {item.GetDisplayInfo()} - {(item.IsAvailable() ? "Tersedia" : "Tidak Tersedia")}";
+        }
+    }
+    
+    /// <summary>
+    /// Concrete Factory: Factory untuk membuat BukuItem
+    /// </summary>
+    public class BukuItemFactory : PerpustakaanItemFactory
+    {
+        private readonly Buku _buku;
+        
+        public BukuItemFactory(Buku buku)
+        {
+            _buku = buku;
+        }
+        
+        public override IPerpustakaanItem CreateItem()
+        {
+            return new BukuItem(_buku);
+        }
+    }
+    
+    /// <summary>
+    /// Concrete Factory: Factory untuk membuat MajalahItem
+    /// </summary>
+    public class MajalahItemFactory : PerpustakaanItemFactory
+    {
+        private readonly int _id;
+        private readonly string _judul;
+        private readonly string _edisi;
+        private readonly int _stok;
+        
+        public MajalahItemFactory(int id, string judul, string edisi, int stok)
+        {
+            _id = id;
+            _judul = judul;
+            _edisi = edisi;
+            _stok = stok;
+        }
+        
+        public override IPerpustakaanItem CreateItem()
+        {
+            return new MajalahItem(_id, _judul, _edisi, _stok);
+        }
+    }
+    
+    /// <summary>
+    /// Concrete Factory: Factory untuk membuat MediaDigitalItem
+    /// </summary>
+    public class MediaDigitalItemFactory : PerpustakaanItemFactory
+    {
+        private readonly int _id;
+        private readonly string _judul;
+        private readonly string _format;
+        private readonly bool _tersedia;
+        
+        public MediaDigitalItemFactory(int id, string judul, string format, bool tersedia)
+        {
+            _id = id;
+            _judul = judul;
+            _format = format;
+            _tersedia = tersedia;
+        }
+        
+        public override IPerpustakaanItem CreateItem()
+        {
+            return new MediaDigitalItem(_id, _judul, _format, _tersedia);
+        }
+    }
+}

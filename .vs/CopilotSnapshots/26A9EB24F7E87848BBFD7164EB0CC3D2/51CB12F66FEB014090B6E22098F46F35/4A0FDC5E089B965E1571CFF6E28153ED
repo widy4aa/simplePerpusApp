@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using PerpusApp.Controllers;
+using PerpusApp.Data;
+using PerpusApp.Views;
+
+namespace PerpusApp
+{
+    // Class untuk merepresentasikan Buku
+    public class Buku
+    {
+        public int Id { get; set; }
+        public string Judul { get; set; }   
+        public string Pengarang { get; set; }
+        public string Kategori { get; set; }
+        public bool Tersedia { get; set; }
+
+        public Buku(int id, string judul, string pengarang, string kategori)
+        {
+            Id = id;
+            Judul = judul;
+            Pengarang = pengarang;
+            Kategori = kategori;
+            Tersedia = true;
+        }
+
+        public override string ToString()
+        {
+            return $"[{Id}] {Judul} - {Pengarang} ({Kategori}) - {(Tersedia ? "Tersedia" : "Dipinjam")}";
+        }
+    }
+
+    // Class untuk mengelola perpustakaan
+    public class Perpustakaan
+    {
+        private List<Buku> daftarBuku;
+        private int nextId;
+
+        public Perpustakaan()
+        {
+            daftarBuku = new List<Buku>();
+            nextId = 1;
+            
+            // Tambah beberapa buku contoh
+            TambahBuku("Laskar Pelangi", "Andrea Hirata", "Novel");
+            TambahBuku("Bumi Manusia", "Pramoedya Ananta Toer", "Novel");
+            TambahBuku("Algoritma dan Pemrograman", "Rinaldi Munir", "Komputer");
+        }
+
+        public void TambahBuku(string judul, string pengarang, string kategori)
+        {
+            var buku = new Buku(nextId++, judul, pengarang, kategori);
+            daftarBuku.Add(buku);
+            Console.WriteLine($"Buku '{judul}' berhasil ditambahkan!");
+        }
+
+        public void TampilkanSemuaBuku()
+        {
+            Console.WriteLine("\n=== DAFTAR BUKU ===");
+            if (daftarBuku.Count == 0)
+            {
+                Console.WriteLine("Tidak ada buku dalam perpustakaan.");
+                return;
+            }
+
+            foreach (var buku in daftarBuku)
+            {
+                Console.WriteLine(buku);
+            }
+        }
+
+        public void CariBuku(string kata)
+        {
+            Console.WriteLine($"\n=== HASIL PENCARIAN: '{kata}' ===");
+            var hasil = daftarBuku.Where(b => 
+                b.Judul.Contains(kata, StringComparison.OrdinalIgnoreCase) ||
+                b.Pengarang.Contains(kata, StringComparison.OrdinalIgnoreCase) ||
+                b.Kategori.Contains(kata, StringComparison.OrdinalIgnoreCase));
+
+            if (!hasil.Any())
+            {
+                Console.WriteLine("Tidak ada buku yang ditemukan.");
+                return;
+            }
+
+            foreach (var buku in hasil)
+            {
+                Console.WriteLine(buku);
+            }
+        }
+
+        public void PinjamBuku(int id)
+        {
+            var buku = daftarBuku.FirstOrDefault(b => b.Id == id);
+            if (buku == null)
+            {
+                Console.WriteLine("Buku tidak ditemukan!");
+                return;
+            }
+
+            if (!buku.Tersedia)
+            {
+                Console.WriteLine("Buku sedang dipinjam!");
+                return;
+            }
+
+            buku.Tersedia = false;
+            Console.WriteLine($"Buku '{buku.Judul}' berhasil dipinjam!");
+        }
+
+        public void KembalikanBuku(int id)
+        {
+            var buku = daftarBuku.FirstOrDefault(b => b.Id == id);
+            if (buku == null)
+            {
+                Console.WriteLine("Buku tidak ditemukan!");
+                return;
+            }
+
+            if (buku.Tersedia)
+            {
+                Console.WriteLine("Buku sudah tersedia di perpustakaan!");
+                return;
+            }
+
+            buku.Tersedia = true;
+            Console.WriteLine($"Buku '{buku.Judul}' berhasil dikembalikan!");
+        }
+    }
+
+    // Program utama
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            // Connection string untuk PostgreSQL
+            string connectionString = "Host=interchange.proxy.rlwy.net;Port=13569;Database=railway;Username=postgres;Password=OFpjBpURdQKFJpiYsLDzGqBMtSQQmCvy";
+            
+            // Inisialisasi Database Service
+            var dbService = new DatabaseService(connectionString);
+            
+            // Inisialisasi Controller
+            var controller = new PerpustakaanController(dbService);
+            
+            // Inisialisasi View
+            var view = new ConsoleView(controller);
+            
+            // Tampilkan UI
+            await view.TampilkanMenuUtama();
+        }
+    }
+}
