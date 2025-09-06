@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PerpusApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c67496207867218182320e9095a2b65cbb6c689")]
 [assembly: System.Reflection.AssemblyProductAttribute("PerpusApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PerpusApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

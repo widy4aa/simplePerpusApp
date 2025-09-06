@@ -1,36 +1,22 @@
-using System;
+﻿using System;
 
 namespace PerpusApp.Models
 {
     /// <summary>
-    /// IPerpustakaanItem: Interface yang berperan sebagai Abstract Product dalam Factory Method Pattern.
-    /// Mendefinisikan kontrak yang harus diimplementasikan oleh semua jenis item perpustakaan.
+    /// Abstract Product: Semua jenis item perpustakaan harus mengimplementasikan interface ini
     /// </summary>
     public interface IPerpustakaanItem
     {
-        /// <summary>
-        /// ID unik dari item
-        /// </summary>
         int Id { get; }
-        
-        /// <summary>
-        /// Mengembalikan informasi yang akan ditampilkan tentang item
-        /// </summary>
         string GetDisplayInfo();
-        
-        /// <summary>
-        /// Mengecek apakah item tersedia untuk dipinjam
-        /// </summary>
         bool IsAvailable();
     }
     
     /// <summary>
-    /// BukuItem: Concrete Product pertama yang mengimplementasikan IPerpustakaanItem.
-    /// Merepresentasikan buku dalam koleksi perpustakaan.
+    /// Concrete Product: Buku sebagai implementasi dari IPerpustakaanItem
     /// </summary>
     public class BukuItem : IPerpustakaanItem
     {
-        // Composition: BukuItem memiliki referensi ke objek Buku
         private readonly Buku _buku;
         
         public BukuItem(Buku buku)
@@ -38,10 +24,8 @@ namespace PerpusApp.Models
             _buku = buku;
         }
         
-        // Implementasi property dari interface
         public int Id => _buku.Id;
         
-        // Implementasi method dari interface
         public string GetDisplayInfo()
         {
             return $"Buku: {_buku.Judul} oleh {_buku.Penulis} ({_buku.Kategori})";
@@ -49,18 +33,15 @@ namespace PerpusApp.Models
         
         public bool IsAvailable()
         {
-            // Buku tersedia jika jumlah stok lebih dari 0
             return _buku.JumlahStok > 0;
         }
     }
     
     /// <summary>
-    /// MajalahItem: Concrete Product kedua yang mengimplementasikan IPerpustakaanItem.
-    /// Merepresentasikan majalah dalam koleksi perpustakaan.
+    /// Concrete Product: Majalah sebagai implementasi dari IPerpustakaanItem
     /// </summary>
     public class MajalahItem : IPerpustakaanItem
     {
-        // Properties untuk menyimpan data majalah
         public int Id { get; private set; }
         public string Judul { get; private set; }
         public string Edisi { get; private set; }
@@ -74,7 +55,6 @@ namespace PerpusApp.Models
             Stok = stok;
         }
         
-        // Implementasi method dari interface
         public string GetDisplayInfo()
         {
             return $"Majalah: {Judul} Edisi {Edisi}";
@@ -82,18 +62,15 @@ namespace PerpusApp.Models
         
         public bool IsAvailable()
         {
-            // Majalah tersedia jika stok lebih dari 0
             return Stok > 0;
         }
     }
     
     /// <summary>
-    /// MediaDigitalItem: Concrete Product ketiga yang mengimplementasikan IPerpustakaanItem.
-    /// Merepresentasikan media digital (video, audio, dll) dalam koleksi perpustakaan.
+    /// Concrete Product: Media Digital sebagai implementasi dari IPerpustakaanItem
     /// </summary>
     public class MediaDigitalItem : IPerpustakaanItem
     {
-        // Properties untuk menyimpan data media digital
         public int Id { get; private set; }
         public string Judul { get; private set; }
         public string Format { get; private set; }
@@ -107,7 +84,6 @@ namespace PerpusApp.Models
             Tersedia = tersedia;
         }
         
-        // Implementasi method dari interface
         public string GetDisplayInfo()
         {
             return $"Media Digital: {Judul} ({Format})";
@@ -115,43 +91,33 @@ namespace PerpusApp.Models
         
         public bool IsAvailable()
         {
-            // Media digital tersedia jika flag Tersedia bernilai true
             return Tersedia;
         }
     }
     
     /// <summary>
-    /// PerpustakaanItemFactory: Abstract Creator dalam Factory Method Pattern.
-    /// Mendefinisikan method abstrak CreateItem() yang harus diimplementasikan oleh subclass.
-    /// Ini adalah inti dari Factory Method Pattern - menyediakan template untuk menciptakan objek,
-    /// tapi membiarkan subclass menentukan kelas spesifik yang akan diinstansiasi.
+    /// Factory Method Pattern: Definisi interface untuk membuat objek item perpustakaan,
+    /// namun membiarkan subclass memutuskan class mana yang akan diinstansiasi.
+    /// Pattern ini memungkinkan pembuatan objek yang berbeda tanpa menentukan class spesifik.
     /// </summary>
     public abstract class PerpustakaanItemFactory
     {
-        /// <summary>
-        /// Factory Method: Method abstrak yang harus diimplementasikan oleh subclass
-        /// untuk menentukan jenis item yang akan dibuat.
-        /// </summary>
+        // Factory Method
         public abstract IPerpustakaanItem CreateItem();
         
-        /// <summary>
-        /// Method umum yang menggunakan Factory Method.
-        /// Ini menunjukkan bagaimana Factory Method digunakan dalam konteks.
-        /// </summary>
+        // Operasi umum yang bisa menggunakan factory method
         public string GetItemInfo()
         {
             // Memanggil factory method untuk mendapatkan objek
-            // tanpa perlu tahu kelas konkret apa yang akan dibuat
             IPerpustakaanItem item = CreateItem();
             
-            // Menggunakan objek yang dibuat melalui interface-nya
+            // Menggunakan objek
             return $"Item {item.Id}: {item.GetDisplayInfo()} - {(item.IsAvailable() ? "Tersedia" : "Tidak Tersedia")}";
         }
     }
     
     /// <summary>
-    /// BukuItemFactory: Concrete Creator pertama yang mengimplementasikan PerpustakaanItemFactory.
-    /// Bertanggung jawab untuk membuat objek BukuItem.
+    /// Concrete Factory: Factory untuk membuat BukuItem
     /// </summary>
     public class BukuItemFactory : PerpustakaanItemFactory
     {
@@ -162,9 +128,6 @@ namespace PerpusApp.Models
             _buku = buku;
         }
         
-        /// <summary>
-        /// Implementasi Factory Method untuk membuat dan mengembalikan BukuItem
-        /// </summary>
         public override IPerpustakaanItem CreateItem()
         {
             return new BukuItem(_buku);
@@ -172,12 +135,10 @@ namespace PerpusApp.Models
     }
     
     /// <summary>
-    /// MajalahItemFactory: Concrete Creator kedua yang mengimplementasikan PerpustakaanItemFactory.
-    /// Bertanggung jawab untuk membuat objek MajalahItem.
+    /// Concrete Factory: Factory untuk membuat MajalahItem
     /// </summary>
     public class MajalahItemFactory : PerpustakaanItemFactory
     {
-        // Fields untuk menyimpan data yang dibutuhkan untuk membuat MajalahItem
         private readonly int _id;
         private readonly string _judul;
         private readonly string _edisi;
@@ -191,9 +152,6 @@ namespace PerpusApp.Models
             _stok = stok;
         }
         
-        /// <summary>
-        /// Implementasi Factory Method untuk membuat dan mengembalikan MajalahItem
-        /// </summary>
         public override IPerpustakaanItem CreateItem()
         {
             return new MajalahItem(_id, _judul, _edisi, _stok);
@@ -201,12 +159,10 @@ namespace PerpusApp.Models
     }
     
     /// <summary>
-    /// MediaDigitalItemFactory: Concrete Creator ketiga yang mengimplementasikan PerpustakaanItemFactory.
-    /// Bertanggung jawab untuk membuat objek MediaDigitalItem.
+    /// Concrete Factory: Factory untuk membuat MediaDigitalItem
     /// </summary>
     public class MediaDigitalItemFactory : PerpustakaanItemFactory
     {
-        // Fields untuk menyimpan data yang dibutuhkan untuk membuat MediaDigitalItem
         private readonly int _id;
         private readonly string _judul;
         private readonly string _format;
@@ -220,9 +176,6 @@ namespace PerpusApp.Models
             _tersedia = tersedia;
         }
         
-        /// <summary>
-        /// Implementasi Factory Method untuk membuat dan mengembalikan MediaDigitalItem
-        /// </summary>
         public override IPerpustakaanItem CreateItem()
         {
             return new MediaDigitalItem(_id, _judul, _format, _tersedia);

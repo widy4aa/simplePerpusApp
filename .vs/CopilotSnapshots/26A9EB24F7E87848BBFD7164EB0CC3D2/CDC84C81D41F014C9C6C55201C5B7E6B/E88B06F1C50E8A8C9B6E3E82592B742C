@@ -1,15 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace PerpusApp.Models
 {
     /// <summary>
-    /// LaporanPerpustakaan: Product dalam Builder Pattern.
-    /// Merupakan objek kompleks yang sedang dibuat oleh Builder.
+    /// Builder Pattern: Memisahkan konstruksi objek kompleks dari representasinya
+    /// sehingga proses konstruksi yang sama dapat membuat representasi yang berbeda.
+    /// Pattern ini berguna untuk membuat objek dengan banyak parameter opsional
+    /// atau banyak langkah konfigurasi.
     /// </summary>
     public class LaporanPerpustakaan
     {
-        // Properti-properti dari objek kompleks yang akan dibangun
         public string Judul { get; set; }
         public DateTime Tanggal { get; set; }
         public string PenggunaId { get; set; }
@@ -21,9 +22,6 @@ namespace PerpusApp.Models
         public string Header { get; set; }
         public string Footer { get; set; }
         
-        /// <summary>
-        /// Override ToString untuk menampilkan laporan dalam format yang terstruktur
-        /// </summary>
         public override string ToString()
         {
             var result = $"=== {Judul} ===\n";
@@ -68,159 +66,110 @@ namespace PerpusApp.Models
     }
     
     /// <summary>
-    /// ILaporanBuilder: Builder interface dalam Builder Pattern.
-    /// Mendefinisikan semua langkah yang diperlukan untuk membangun objek LaporanPerpustakaan.
-    /// Menggunakan fluent interface (method chaining) untuk memudahkan pembangunan objek.
+    /// Builder: Interface yang mendefinisikan langkah-langkah untuk membuat LaporanPerpustakaan
     /// </summary>
     public interface ILaporanBuilder
     {
-        // Method untuk mengatur judul laporan
         ILaporanBuilder SetJudul(string judul);
-        
-        // Method untuk mengatur tanggal laporan
         ILaporanBuilder SetTanggal(DateTime tanggal);
-        
-        // Method untuk mengatur penyusun laporan
         ILaporanBuilder SetPenyusun(string penyusun);
-        
-        // Method untuk menambahkan satu buku ke laporan
         ILaporanBuilder AddBuku(Buku buku);
-        
-        // Method untuk menambahkan beberapa buku sekaligus ke laporan
         ILaporanBuilder AddBukuRange(IEnumerable<Buku> daftarBuku);
-        
-        // Method untuk menambahkan satu peminjaman ke laporan
         ILaporanBuilder AddPeminjaman(Peminjaman peminjaman);
-        
-        // Method untuk menambahkan beberapa peminjaman sekaligus ke laporan
         ILaporanBuilder AddPeminjamanRange(IEnumerable<Peminjaman> daftarPeminjaman);
-        
-        // Method untuk menambahkan satu pengguna ke laporan
         ILaporanBuilder AddPengguna(Pengguna pengguna);
-        
-        // Method untuk menambahkan beberapa pengguna sekaligus ke laporan
         ILaporanBuilder AddPenggunaRange(IEnumerable<Pengguna> daftarPengguna);
-        
-        // Method untuk mengatur header laporan
         ILaporanBuilder SetHeader(string header);
-        
-        // Method untuk mengatur footer laporan
         ILaporanBuilder SetFooter(string footer);
-        
-        // Method untuk menghasilkan objek akhir yang sudah dibangun
         LaporanPerpustakaan Build();
     }
     
     /// <summary>
-    /// LaporanPerpustakaanBuilder: Concrete Builder dalam Builder Pattern.
-    /// Menyediakan implementasi spesifik dari builder interface.
-    /// Bertanggung jawab untuk mengkonstruksi dan merakit bagian-bagian dari Product.
+    /// Concrete Builder: Implementasi dari ILaporanBuilder
     /// </summary>
     public class LaporanPerpustakaanBuilder : ILaporanBuilder
     {
-        // Objek yang sedang dibangun
         private readonly LaporanPerpustakaan _laporan = new LaporanPerpustakaan();
         
-        // Implementasi method untuk mengatur judul
         public ILaporanBuilder SetJudul(string judul)
         {
             _laporan.Judul = judul;
-            return this; // Mengembalikan this untuk method chaining
+            return this;
         }
         
-        // Implementasi method untuk mengatur tanggal
         public ILaporanBuilder SetTanggal(DateTime tanggal)
         {
             _laporan.Tanggal = tanggal;
             return this;
         }
         
-        // Implementasi method untuk mengatur penyusun
         public ILaporanBuilder SetPenyusun(string penyusun)
         {
             _laporan.Penyusun = penyusun;
             return this;
         }
         
-        // Implementasi method untuk menambahkan buku
         public ILaporanBuilder AddBuku(Buku buku)
         {
             _laporan.DaftarBuku.Add(buku);
             return this;
         }
         
-        // Implementasi method untuk menambahkan beberapa buku
         public ILaporanBuilder AddBukuRange(IEnumerable<Buku> daftarBuku)
         {
             _laporan.DaftarBuku.AddRange(daftarBuku);
             return this;
         }
         
-        // Implementasi method untuk menambahkan peminjaman
         public ILaporanBuilder AddPeminjaman(Peminjaman peminjaman)
         {
             _laporan.DaftarPeminjaman.Add(peminjaman);
             return this;
         }
         
-        // Implementasi method untuk menambahkan beberapa peminjaman
         public ILaporanBuilder AddPeminjamanRange(IEnumerable<Peminjaman> daftarPeminjaman)
         {
             _laporan.DaftarPeminjaman.AddRange(daftarPeminjaman);
             return this;
         }
         
-        // Implementasi method untuk menambahkan pengguna
         public ILaporanBuilder AddPengguna(Pengguna pengguna)
         {
             _laporan.DaftarPengguna.Add(pengguna);
             return this;
         }
         
-        // Implementasi method untuk menambahkan beberapa pengguna
         public ILaporanBuilder AddPenggunaRange(IEnumerable<Pengguna> daftarPengguna)
         {
             _laporan.DaftarPengguna.AddRange(daftarPengguna);
             return this;
         }
         
-        // Implementasi method untuk mengatur header
         public ILaporanBuilder SetHeader(string header)
         {
             _laporan.Header = header;
             return this;
         }
         
-        // Implementasi method untuk mengatur footer
         public ILaporanBuilder SetFooter(string footer)
         {
             _laporan.Footer = footer;
             return this;
         }
         
-        // Implementasi method untuk membangun objek final
         public LaporanPerpustakaan Build()
         {
-            // Mengembalikan objek yang sudah dibangun
             return _laporan;
         }
     }
     
     /// <summary>
-    /// LaporanDirector: Director dalam Builder Pattern.
-    /// Mengontrol urutan pembuatan objek menggunakan builder.
-    /// Director tahu urutan pembuatan objek yang tepat untuk menghasilkan 
-    /// konfigurasi tertentu dari Product (dalam hal ini, jenis laporan tertentu).
+    /// Director: Kelas yang menggunakan builder untuk membuat objek dalam urutan tertentu
     /// </summary>
     public class LaporanDirector
     {
-        /// <summary>
-        /// Membuat laporan bulanan dengan konfigurasi standar
-        /// </summary>
         public LaporanPerpustakaan BuildLaporanBulanan(ILaporanBuilder builder, List<Buku> daftarBuku, List<Peminjaman> daftarPeminjaman, string penyusun)
         {
-            // Menggunakan builder dengan urutan pemanggilan method yang tepat
-            // untuk membuat laporan bulanan
             return builder
                 .SetJudul("Laporan Bulanan Perpustakaan")
                 .SetTanggal(DateTime.Now)
@@ -232,13 +181,8 @@ namespace PerpusApp.Models
                 .Build();
         }
         
-        /// <summary>
-        /// Membuat laporan inventaris dengan konfigurasi standar
-        /// </summary>
         public LaporanPerpustakaan BuildLaporanInventaris(ILaporanBuilder builder, List<Buku> daftarBuku, string penyusun)
         {
-            // Menggunakan builder dengan urutan pemanggilan method yang tepat
-            // untuk membuat laporan inventaris
             return builder
                 .SetJudul("Laporan Inventaris Buku")
                 .SetTanggal(DateTime.Now)
@@ -249,13 +193,8 @@ namespace PerpusApp.Models
                 .Build();
         }
         
-        /// <summary>
-        /// Membuat laporan anggota dengan konfigurasi standar
-        /// </summary>
         public LaporanPerpustakaan BuildLaporanAnggota(ILaporanBuilder builder, List<Pengguna> daftarPengguna, string penyusun)
         {
-            // Menggunakan builder dengan urutan pemanggilan method yang tepat
-            // untuk membuat laporan anggota
             return builder
                 .SetJudul("Laporan Anggota Perpustakaan")
                 .SetTanggal(DateTime.Now)

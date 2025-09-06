@@ -17,3 +17,4 @@ C:\Users\widy4aa\Documents\Coding\PerpusApp\PerpusApp\obj\Debug\net8.0\refint\Pe
 C:\Users\widy4aa\Documents\Coding\PerpusApp\PerpusApp\obj\Debug\net8.0\PerpusApp.pdb
 C:\Users\widy4aa\Documents\Coding\PerpusApp\PerpusApp\obj\Debug\net8.0\PerpusApp.genruntimeconfig.cache
 C:\Users\widy4aa\Documents\Coding\PerpusApp\PerpusApp\obj\Debug\net8.0\ref\PerpusApp.dll
+C:\Users\widy4aa\Documents\Coding\PerpusApp\PerpusApp\obj\Debug\net8.0\PerpusApp.sourcelink.json

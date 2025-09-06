@@ -1,0 +1,69 @@
+﻿using System;
+using Npgsql;
+using System.Threading.Tasks;
+
+namespace PerpusApp.Data
+{
+    /// <summary>
+    /// Singleton Pattern: Memastikan hanya ada satu instance dari koneksi database
+    /// yang digunakan di seluruh aplikasi. Pattern ini memastikan penggunaan resource
+    /// yang efisien dan sentralisasi kontrol koneksi.
+    /// </summary>
+    public class DatabaseConnectionSingleton
+    {
+        // Instance tunggal
+        private static DatabaseConnectionSingleton _instance;
+        
+        // Lock object untuk thread safety
+        private static readonly object _lock = new object();
+        
+        private readonly string _connectionString;
+        
+        // Constructor private sehingga tidak bisa di-instantiate dari luar
+        private DatabaseConnectionSingleton(string connectionString)
+        {
+            _connectionString = connectionString;
+            Console.WriteLine("DatabaseConnectionSingleton: Instance dibuat.");
+        }
+        
+        // Method untuk mendapatkan instance (lazy initialization)
+        public static DatabaseConnectionSingleton GetInstance(string connectionString)
+        {
+            // Double-check locking untuk thread safety
+            if (_instance == null)
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new DatabaseConnectionSingleton(connectionString);
+                    }
+                }
+            }
+            return _instance;
+        }
+        
+        // Method untuk membuat koneksi database
+        public NpgsqlConnection CreateConnection()
+        {
+            return new NpgsqlConnection(_connectionString);
+        }
+        
+        // Method untuk test koneksi
+        public async Task<bool> TestConnectionAsync()
+        {
+            try
+            {
+                using (var connection = CreateConnection())
+                {
+                    await connection.OpenAsync();
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
+}
