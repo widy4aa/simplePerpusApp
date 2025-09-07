@@ -808,25 +808,6 @@ var hasil = await controller.CariBukuAsync("Clean");
 var success = await controller.PinjamBukuAsync(1, "John Doe");
 ```
 
-## 🔮 Future Enhancements
-
-- [ ] REST API dengan ASP.NET Core
-- [ ] Web UI dengan Blazor
-- [ ] Authentication & Authorization
-- [ ] Reporting system
-- [ ] Mobile app dengan .NET MAUI
-- [ ] Real-time notifications
-- [ ] Barcode scanning
-- [ ] Advanced search filters
-
-## 🤝 Contributing
-
-1. Fork the project
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open Pull Request
-
 ## 📚 Daftar Pustaka
 
 ### Design Patterns & Architecture
